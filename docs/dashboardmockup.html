@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Expense Tracker Dashboard</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--ink: #17191f;
+			--muted: #9ba1ae;
+			--line: #edf0f5;
+			--panel: #ffffff;
+			--soft: #f5f7fa;
+			--blue: #287ff0;
+			--teal: #2ab99d;
+			--nav-width: 265px;
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			min-width: 320px;
+			background: #f1f3f6;
+			color: var(--ink);
+			font-family: "DM Sans", sans-serif;
+		}
+
+		button { font: inherit; }
+
+		.app-shell {
+			display: flex;
+			min-height: 100vh;
+			padding: 12px;
+		}
+
+		.sidebar {
+			width: var(--nav-width);
+			flex: 0 0 var(--nav-width);
+			padding: 68px 44px 40px;
+			border-radius: 26px 0 0 26px;
+			background: #111213;
+			color: #fff;
+		}
+
+		.profile { margin-bottom: 92px; }
+
+		.avatar-wrap { position: relative; width: 60px; margin-bottom: 17px; }
+
+		.avatar {
+			display: grid;
+			width: 60px;
+			height: 60px;
+			place-items: center;
+			overflow: hidden;
+			border-radius: 14px;
+			background: linear-gradient(145deg, #c4b5a4, #776b62);
+			color: #fff;
+			font-family: "Plus Jakarta Sans", sans-serif;
+			font-size: 20px;
+			font-weight: 800;
+		}
+
+		.avatar::before {
+			content: "";
+			width: 25px;
+			height: 25px;
+			margin-top: 18px;
+			border-radius: 50%;
+			background: #f1c49f;
+			box-shadow: 0 20px 0 10px #a87155;
+		}
+
+		.notification {
+			position: absolute;
+			top: -12px;
+			right: -12px;
+			display: grid;
+			width: 24px;
+			height: 24px;
+			place-items: center;
+			border-radius: 50%;
+			background: #ed3e47;
+			font-size: 12px;
+			font-weight: 700;
+		}
+
+		.profile h1 { margin: 0 0 3px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 25px; letter-spacing: -0.6px; }
+		.profile p { margin: 0; color: #85858a; font-size: 14px; }
+
+		.nav { display: grid; gap: 30px; }
+
+		.nav button {
+			padding: 0;
+			border: 0;
+			background: transparent;
+			color: #89898d;
+			cursor: pointer;
+			font-size: 20px;
+			font-weight: 600;
+			text-align: left;
+			transition: color 180ms ease, transform 180ms ease;
+		}
+
+		.nav button:hover, .nav button.active { color: #fff; transform: translateX(3px); }
+
+		.workspace {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 292px;
+			flex: 1;
+			overflow: hidden;
+			border-radius: 0 26px 26px 0;
+			background: var(--panel);
+		}
+
+		.content { min-width: 0; padding: 54px 82px 60px; }
+
+		.content-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+		.eyebrow { margin: 0 0 9px; color: #b1b4bc; font-size: 14px; }
+		.content h2 { margin: 0; font-family: "Plus Jakarta Sans", sans-serif; font-size: clamp(32px, 3vw, 42px); letter-spacing: -1.8px; }
+
+		.people { display: flex; align-items: center; padding-top: 5px; }
+		.person { width: 30px; height: 30px; margin-left: -7px; display: grid; place-items: center; border: 3px solid #fff; border-radius: 50%; background: #efb58d; color: #fff; font-size: 10px; font-weight: 700; }
+		.person:first-child { margin-left: 0; background: #ef8d80; }
+		.person:nth-child(2) { background: #d4a38f; }
+		.person:nth-child(3) { background: #727f95; }
+		.add-person { width: 30px; height: 30px; margin-left: 7px; border: 2px solid #dce3ed; border-radius: 50%; background: #fff; color: #c7d0dc; cursor: pointer; font-size: 21px; line-height: 22px; }
+
+		.chart { display: flex; align-items: end; gap: 6px; height: 68px; margin: 42px 0 38px; }
+		.bar { width: 14px; min-height: 14px; border-radius: 1px 1px 0 0; background: #d7e7fc; }
+		.bar.highlight { background: var(--blue); }
+
+		.section-title { display: flex; align-items: center; justify-content: space-between; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+		.section-title h3 { margin: 0; font-size: 16px; }
+		.more { border: 0; background: transparent; color: #c6c9cf; cursor: pointer; font-size: 20px; letter-spacing: 2px; }
+
+		.transactions { margin: 6px 0 36px; }
+		.transaction { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 13px; padding: 13px 0; }
+		.category-icon { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; color: #fff; font-size: 17px; font-weight: 700; }
+		.grocery { background: #36a9e0; }
+		.transport { background: #b446ca; }
+		.housing { background: #ff8900; }
+		.food { background: #eb3738; }
+		.entertainment { background: #47ad3e; }
+		.transaction strong { display: block; margin-bottom: 2px; font-size: 14px; }
+		.transaction small { color: #b3b7be; font-size: 12px; }
+		.amount { font-size: 14px; font-weight: 700; white-space: nowrap; }
+		.dot { display: inline-block; width: 3px; height: 3px; margin: 0 8px 3px; border-radius: 50%; background: #c5c9d0; }
+
+		.summary { padding: 54px 42px 42px; background: #fafbfc; }
+		.summary h3 { margin: 10px 0 28px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 17px; }
+		.category { margin-bottom: 26px; }
+		.category-line { display: flex; justify-content: space-between; margin-bottom: 9px; font-size: 12px; }
+		.category-line span:last-child { color: #7d8490; }
+		.progress { height: 4px; overflow: hidden; border-radius: 4px; background: #e8ebf0; }
+		.progress span { display: block; height: 100%; border-radius: inherit; background: var(--teal); }
+
+		.tip-card { position: relative; margin-top: 51px; padding: 67px 20px 20px; border-radius: 13px; background: #edf1f7; }
+		.tip-illustration { position: absolute; top: -21px; left: 21px; width: 72px; height: 59px; }
+		.tip-illustration::before, .tip-illustration::after { content: ""; position: absolute; bottom: 0; width: 58px; height: 28px; border: 1px solid #df784e; background: #ff9c5b; box-shadow: inset 0 7px 0 #f77b42; }
+		.tip-illustration::before { left: 0; transform: translateY(-13px); }
+		.tip-illustration::after { left: 13px; background: #ffa05e; box-shadow: inset 0 7px 0 #fdc06f; }
+		.tip-card h4 { margin: 0 0 5px; font-size: 14px; }
+		.tip-card p { margin: 0 0 15px; color: #949ca8; font-size: 12px; line-height: 1.5; }
+		.tip-card button { width: 100%; padding: 11px; border: 0; border-radius: 7px; background: #111213; color: #fff; cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+		.tip-card button:hover { background: #2d3035; }
+
+		.toast { position: fixed; right: 24px; bottom: 24px; max-width: 260px; padding: 13px 16px; border-radius: 9px; background: #111213; color: #fff; box-shadow: 0 12px 30px #0002; font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(12px); transition: opacity 200ms ease, transform 200ms ease; }
+		.toast.show { opacity: 1; transform: translateY(0); }
+
+		@media (max-width: 980px) {
+			.content { padding: 42px 48px 48px; }
+			.summary { padding: 42px 28px; }
+			.sidebar { padding-left: 30px; padding-right: 30px; }
+		}
+
+		@media (max-width: 760px) {
+			.app-shell { padding: 0; display: block; }
+			.sidebar { width: auto; border-radius: 0; padding: 22px 22px 18px; }
+			.profile { display: flex; align-items: center; gap: 13px; margin-bottom: 20px; }
+			.avatar-wrap { margin: 0; }
+			.profile h1 { font-size: 19px; }
+			.profile p { font-size: 12px; }
+			.nav { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 3px; }
+			.nav button { flex: 0 0 auto; font-size: 14px; }
+			.workspace { display: block; border-radius: 0; }
+			.content { padding: 34px 22px 40px; }
+			.chart { gap: 4px; margin: 30px 0 32px; }
+			.bar { flex: 1; width: auto; max-width: 18px; }
+			.summary { padding: 34px 22px 42px; }
+			.summary h3 { margin-top: 0; }
+			.tip-card { margin-top: 36px; }
+		}
+	</style>
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar" aria-label="Main navigation">
+			<div class="profile">
+				<div class="avatar-wrap"><div class="avatar" aria-label="Samantha profile photo"></div><span class="notification">4</span></div>
+				<div><h1>Samantha</h1><p>samantha@email.com</p></div>
+			</div>
+			<nav class="nav">
+				<button type="button">Dashboard</button>
+				<button type="button" class="active">Expenses</button>
+				<button type="button">Wallets</button>
+				<button type="button">Summary</button>
+				<button type="button">Accounts</button>
+				<button type="button">Settings</button>
+			</nav>
+		</aside>
+
+		<main class="workspace">
+			<section class="content" aria-labelledby="page-title">
+				<header class="content-header">
+					<div><p class="eyebrow">01 - 25 March, 2020</p><h2 id="page-title">Expenses</h2></div>
+					<div class="people" aria-label="Shared account members"><span class="person">A</span><span class="person">M</span><span class="person">J</span><button class="add-person" type="button" aria-label="Add account member">+</button></div>
+				</header>
+
+				<div class="chart" aria-label="Daily spending activity" role="img">
+					<span class="bar" style="height: 43%"></span><span class="bar" style="height: 65%"></span><span class="bar" style="height: 55%"></span><span class="bar" style="height: 31%"></span><span class="bar" style="height: 43%"></span><span class="bar" style="height: 36%"></span><span class="bar" style="height: 55%"></span><span class="bar" style="height: 34%"></span><span class="bar" style="height: 45%"></span><span class="bar" style="height: 65%"></span><span class="bar" style="height: 46%"></span><span class="bar" style="height: 36%"></span><span class="bar" style="height: 54%"></span><span class="bar" style="height: 41%"></span><span class="bar" style="height: 56%"></span><span class="bar" style="height: 32%"></span><span class="bar" style="height: 45%"></span><span class="bar" style="height: 75%"></span><span class="bar" style="height: 53%"></span><span class="bar" style="height: 34%"></span><span class="bar" style="height: 49%"></span><span class="bar highlight" style="height: 87%"></span><span class="bar" style="height: 64%"></span>
+				</div>
+
+				<div class="section-title"><h3>Today</h3><button class="more" type="button" aria-label="More options">•••</button></div>
+				<div class="transactions">
+					<article class="transaction"><span class="category-icon grocery" aria-hidden="true">⌁</span><div><strong>Grocery</strong><small>5:12 pm <i class="dot"></i> Belanja di pasar</small></div><span class="amount">-326.800</span></article>
+					<article class="transaction"><span class="category-icon transport" aria-hidden="true">▣</span><div><strong>Transportation</strong><small>5:12 pm <i class="dot"></i> Naik bus umum</small></div><span class="amount">-15.000</span></article>
+					<article class="transaction"><span class="category-icon housing" aria-hidden="true">⌂</span><div><strong>Housing</strong><small>5:12 pm <i class="dot"></i> Bayar Listrik</small></div><span class="amount">-185.750</span></article>
+				</div>
+
+				<div class="section-title"><h3>Monday, 23 March 2020</h3><button class="more" type="button" aria-label="More options">•••</button></div>
+				<div class="transactions">
+					<article class="transaction"><span class="category-icon food" aria-hidden="true">⌁</span><div><strong>Food and Drink</strong><small>5:12 pm <i class="dot"></i> Makan Steak</small></div><span class="amount">-156.000</span></article>
+					<article class="transaction"><span class="category-icon entertainment" aria-hidden="true">▶</span><div><strong>Entertainment</strong><small>5:12 pm <i class="dot"></i> Nonton Bioskop</small></div><span class="amount">-35.200</span></article>
+				</div>
+			</section>
+
+			<aside class="summary" aria-labelledby="summary-title">
+				<h3 id="summary-title">Where your money go?</h3>
+				<div class="category"><div class="category-line"><span>Food and Drinks</span><span>872.400</span></div><div class="progress"><span style="width: 32%"></span></div></div>
+				<div class="category"><div class="category-line"><span>Shopping</span><span>1.378.200</span></div><div class="progress"><span style="width: 49%"></span></div></div>
+				<div class="category"><div class="category-line"><span>Housing</span><span>928.500</span></div><div class="progress"><span style="width: 38%"></span></div></div>
+				<div class="category"><div class="category-line"><span>Transportation</span><span>420.700</span></div><div class="progress"><span style="width: 28%"></span></div></div>
+				<div class="category"><div class="category-line"><span>Vehicle</span><span>520.000</span></div><div class="progress"><span style="width: 38%"></span></div></div>
+
+				<div class="tip-card"><div class="tip-illustration" aria-hidden="true"></div><h4>Save more money</h4><p>eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p><button type="button" id="tips-button">VIEW TIPS</button></div>
+			</aside>
+		</main>
+	</div>
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+	<script>
+		const toast = document.querySelector('#toast');
+		let toastTimer;
+
+		function showToast(message) {
+			toast.textContent = message;
+			toast.classList.add('show');
+			clearTimeout(toastTimer);
+			toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+		}
+
+		document.querySelectorAll('.nav button').forEach((button) => {
+			button.addEventListener('click', () => {
+				document.querySelector('.nav button.active').classList.remove('active');
+				button.classList.add('active');
+				showToast(`${button.textContent} selected`);
+			});
+		});
+
+		document.querySelector('#tips-button').addEventListener('click', () => showToast('Your personalized saving tips are on the way.'));
+		document.querySelector('.add-person').addEventListener('click', () => showToast('Invite link copied to clipboard.'));
+	</script>
+</body>
+</html>
