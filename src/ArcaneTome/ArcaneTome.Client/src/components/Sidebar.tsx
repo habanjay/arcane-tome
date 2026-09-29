@@ -10,16 +10,15 @@ function Sidebar({ activeItem, onSelect }: SidebarProps) {
     <aside className="sidebar" aria-label="Main navigation">
       <div className="profile">
         <div className="avatar-wrap">
-          <div className="avatar" aria-label="Mira Vale profile photo"><span>MV</span></div>
+          <div className="avatar" aria-label="Samantha profile photo"><span>SA</span></div>
           <span className="notification">4</span>
         </div>
-        <div><h1>Mira Vale</h1><p>mira@arcane.tome</p></div>
+        <div><h1>Samantha</h1><p>samantha@email.com</p></div>
       </div>
-      <div className="brand-mark" aria-label="Arcane Tome">A<span>✦</span>T</div>
       <nav className="nav">
         {navItems.map((item) => (
           <button className={activeItem === item.label ? 'active' : ''} key={item.label} onClick={() => onSelect(item.label)} type="button">
-            <span className="nav-icon" aria-hidden="true">{item.icon}</span>{item.label}
+            {item.label}
           </button>
         ))}
       </nav>
