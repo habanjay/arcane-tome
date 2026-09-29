@@ -5,7 +5,7 @@
   <Folder Name="/src/">
     <Project Path="src/ArcaneTome/ArcaneTome.AppHost/ArcaneTome.AppHost.csproj" Id="8af97633-b7e7-4370-9ece-3c62912ce0d3" />
     <Project Path="src/ArcaneTome/ArcaneTome.Server/ArcaneTome.Server.csproj" />
-    <Project Path="src/ArcaneTome/frontend/frontend.esproj">
+    <Project Path="src/ArcaneTome/ArcaneTome.Client/ArcaneTome.Client.esproj">
       <Build />
       <Deploy />
     </Project>

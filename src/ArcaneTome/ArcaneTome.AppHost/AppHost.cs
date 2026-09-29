@@ -4,10 +4,10 @@ var server = builder.AddProject<Projects.ArcaneTome_Server>("server")
     .WithHttpHealthCheck("/health")
     .WithExternalHttpEndpoints();
 
-var webfrontend = builder.AddViteApp("webfrontend", "../frontend")
+var client = builder.AddViteApp("client", "../ArcaneTome.Client")
     .WithReference(server)
     .WaitFor(server);
 
-server.PublishWithContainerFiles(webfrontend, "wwwroot");
+server.PublishWithContainerFiles(client, "wwwroot");
 
 builder.Build().Run();
