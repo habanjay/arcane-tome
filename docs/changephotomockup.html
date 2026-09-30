@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Change photo | Expense Tracker</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root { --ink: #17191f; --muted: #9ba1ae; --line: #edf0f5; --blue: #287ff0; --teal: #2ab99d; --nav-width: 265px; }
+		* { box-sizing: border-box; }
+		body { margin: 0; min-width: 320px; background: #f1f3f6; color: var(--ink); font-family: "DM Sans", sans-serif; }
+		button, input { font: inherit; } button { cursor: pointer; }
+		button:focus-visible, input:focus-visible, .upload-zone:focus-within { outline: 2px solid var(--blue); outline-offset: 3px; }
+		.app-shell { display: flex; min-height: 100vh; padding: 12px; }
+		.sidebar { width: var(--nav-width); flex: 0 0 var(--nav-width); padding: 68px 44px 40px; border-radius: 26px 0 0 26px; background: #111213; color: #fff; }
+		.profile { margin-bottom: 92px; } .avatar-wrap { position: relative; width: 60px; margin-bottom: 17px; }
+		.avatar { display: grid; width: 60px; height: 60px; place-items: center; overflow: hidden; border-radius: 14px; background: linear-gradient(145deg, #c4b5a4, #776b62); }
+		.avatar::before { content: ""; width: 25px; height: 25px; margin-top: 18px; border-radius: 50%; background: #f1c49f; box-shadow: 0 20px 0 10px #a87155; }
+		.notification { position: absolute; top: -12px; right: -12px; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #ed3e47; font-size: 12px; font-weight: 700; }
+		.profile h1 { margin: 0 0 3px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 25px; letter-spacing: -.6px; } .profile p { margin: 0; color: #85858a; font-size: 14px; }
+		.nav { display: grid; gap: 30px; } .nav button { padding: 0; border: 0; background: transparent; color: #89898d; font-size: 20px; font-weight: 600; text-align: left; transition: color 180ms ease, transform 180ms ease; }
+		.nav button:hover, .nav button.active { color: #fff; transform: translateX(3px); }
+		.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 292px; flex: 1; overflow: hidden; border-radius: 0 26px 26px 0; background: #fff; }
+		.content { min-width: 0; padding: 54px 70px 60px; } .content-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+		.eyebrow { margin: 0 0 9px; color: #b1b4bc; font-size: 14px; } .content h2 { margin: 0; font-family: "Plus Jakarta Sans", sans-serif; font-size: clamp(32px, 3vw, 42px); letter-spacing: -1.8px; }
+		.back-link { margin-top: 6px; padding: 0; border: 0; background: transparent; color: #aeb3bd; font-size: 13px; } .back-link:hover { color: var(--blue); }
+		.photo-panel { max-width: 650px; margin-top: 46px; } .section-title { display: flex; align-items: center; justify-content: space-between; padding-bottom: 13px; border-bottom: 1px solid var(--line); } .section-title h3 { margin: 0; font-size: 16px; }
+		.section-note { margin: 9px 0 25px; color: #9da4af; font-size: 12px; line-height: 1.5; }
+		.photo-editor { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 32px; align-items: center; }
+		.photo-preview { display: grid; width: 178px; height: 178px; place-items: center; overflow: hidden; border-radius: 24px; background: linear-gradient(145deg, #c4b5a4, #776b62); box-shadow: 0 14px 30px #17191f14; }
+		.photo-preview::before { content: ""; width: 66px; height: 66px; margin-top: 43px; border-radius: 50%; background: #f1c49f; box-shadow: 0 53px 0 25px #a87155; }
+		.photo-preview.has-image::before { display: none; } .photo-preview img { display: none; width: 100%; height: 100%; object-fit: cover; } .photo-preview.has-image img { display: block; }
+		.photo-copy h4 { margin: 0 0 7px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 17px; } .photo-copy p { margin: 0 0 18px; color: #9da4af; font-size: 12px; line-height: 1.5; }
+		.upload-zone { display: grid; gap: 5px; padding: 22px 18px; border: 1px dashed #cbd5e3; border-radius: 10px; background: #fafbfc; text-align: center; transition: border-color 180ms ease, background 180ms ease; } .upload-zone:hover, .upload-zone.dragging { border-color: var(--blue); background: #f3f8ff; }
+		.upload-zone strong { color: var(--blue); font-size: 12px; } .upload-zone span { color: #a7adb7; font-size: 11px; } .upload-zone input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+		.file-name { min-height: 17px; margin: 11px 0 0; color: #737b88; font-size: 11px; text-align: center; }
+		.actions { display: flex; align-items: center; gap: 18px; margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--line); } .save-button { padding: 13px 22px; border: 0; border-radius: 7px; background: #111213; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .7px; } .save-button:hover { background: var(--blue); } .cancel-button, .remove-button { border: 0; background: transparent; color: #a4aab4; font-size: 12px; font-weight: 600; } .remove-button { color: #eb5e5e; }
+		.summary { padding: 54px 42px 42px; background: #fafbfc; } .summary h3 { margin: 10px 0 28px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 17px; }
+		.account-card { padding: 20px; border-radius: 11px; background: #fff; box-shadow: 0 8px 22px #17191f08; } .account-card > span { color: #9da4af; font-size: 11px; } .account-card strong { display: block; margin: 7px 0 18px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 17px; }
+		.security-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); } .security-row span { color: #737b88; font-size: 12px; } .security-row strong { margin: 0; font-family: "DM Sans", sans-serif; font-size: 12px; }
+		.tip-card { margin-top: 28px; padding: 21px 20px 20px; border-radius: 13px; background: #edf1f7; } .tip-card h4 { margin: 0 0 5px; font-size: 14px; } .tip-card p { margin: 0; color: #949ca8; font-size: 12px; line-height: 1.5; }
+		.toast { position: fixed; right: 24px; bottom: 24px; max-width: 280px; padding: 13px 16px; border-radius: 9px; background: #111213; color: #fff; box-shadow: 0 12px 30px #0002; font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(12px); transition: opacity 200ms ease, transform 200ms ease; } .toast.show { opacity: 1; transform: translateY(0); }
+		@media (max-width: 1050px) { .content { padding: 42px 48px 48px; } .summary { padding: 42px 28px; } .sidebar { padding-left: 30px; padding-right: 30px; } }
+		@media (max-width: 760px) { .app-shell { display: block; padding: 0; } .sidebar { width: auto; padding: 22px; border-radius: 0; } .profile { display: flex; align-items: center; gap: 13px; margin-bottom: 20px; } .avatar-wrap { margin: 0; } .profile h1 { font-size: 19px; } .profile p { font-size: 12px; } .nav { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 3px; } .nav button { flex: 0 0 auto; font-size: 14px; } .workspace { display: block; border-radius: 0; } .content { padding: 34px 22px 40px; } .content-header { display: block; } .back-link { margin-top: 20px; } .photo-panel { margin-top: 35px; } .photo-editor { grid-template-columns: 1fr; gap: 24px; justify-items: center; } .photo-copy { width: 100%; } .summary { padding: 34px 22px 42px; } .summary h3 { margin-top: 0; } }
+	</style>
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar" aria-label="Main navigation"><div class="profile"><div class="avatar-wrap"><div class="avatar" aria-label="Samantha profile photo"></div><span class="notification">4</span></div><div><h1>Samantha</h1><p>samantha@email.com</p></div></div><nav class="nav"><button type="button">Dashboard</button><button type="button">Expenses</button><button type="button">Wallets</button><button type="button">Summary</button><button type="button">Accounts</button><button type="button" class="active">Settings</button></nav></aside>
+		<main class="workspace">
+			<section class="content" aria-labelledby="page-title">
+				<header class="content-header"><div><p class="eyebrow">01 - 25 March, 2020</p><h2 id="page-title">Change photo</h2></div><button class="back-link" id="back-button" type="button">← Back to settings</button></header>
+				<section class="photo-panel" aria-labelledby="photo-title"><div class="section-title"><h3 id="photo-title">Profile photo</h3><button class="remove-button" id="remove-button" type="button">REMOVE PHOTO</button></div><p class="section-note">Choose a clear photo so your shared expenses are easy to recognize.</p><div class="photo-editor"><div class="photo-preview" id="photo-preview"><img id="photo-image" alt="Selected profile photo"></div><div class="photo-copy"><h4>Upload a new photo</h4><p>Use a square JPG or PNG image for the best result. Your photo should be smaller than 2 MB.</p><label class="upload-zone" for="photo-input"><strong>Choose a photo</strong><span>or drag and drop it here</span><input id="photo-input" type="file" accept="image/jpeg,image/png"></label><p class="file-name" id="file-name" aria-live="polite">No new photo selected</p></div></div><div class="actions"><button class="save-button" id="save-button" type="button">SAVE PHOTO</button><button class="cancel-button" id="cancel-button" type="button">Cancel</button></div></section>
+			</section>
+			<aside class="summary" aria-labelledby="summary-title"><h3 id="summary-title">Account overview</h3><div class="account-card"><span>PROFILE PHOTO</span><strong id="photo-status">Current photo</strong><div class="security-row"><span>File type</span><strong id="file-type">Not changed</strong></div><div class="security-row"><span>Visibility</span><strong>Private</strong></div><div class="security-row"><span>Last updated</span><strong>January 2020</strong></div></div><div class="tip-card"><h4>Make it yours</h4><p>A familiar photo helps your household spot the right account at a glance.</p></div></aside>
+		</main>
+	</div>
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+	<script>
+		const toast = document.querySelector('#toast');
+		const fileInput = document.querySelector('#photo-input');
+		const photoPreview = document.querySelector('#photo-preview');
+		const photoImage = document.querySelector('#photo-image');
+		const fileName = document.querySelector('#file-name');
+		const photoStatus = document.querySelector('#photo-status');
+		const fileType = document.querySelector('#file-type');
+		let toastTimer;
+		let selectedFile;
+		function showToast(message) { toast.textContent = message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2400); }
+		function selectPhoto(file) { if (!file) return; if (!['image/jpeg', 'image/png'].includes(file.type)) { showToast('Please choose a JPG or PNG image.'); return; } if (file.size > 2 * 1024 * 1024) { showToast('That photo is larger than 2 MB.'); return; } selectedFile = file; photoImage.src = URL.createObjectURL(file); photoPreview.classList.add('has-image'); fileName.textContent = `${file.name} · ${(file.size / 1024).toFixed(0)} KB`; photoStatus.textContent = 'New photo ready'; fileType.textContent = file.type === 'image/png' ? 'PNG image' : 'JPG image'; }
+		document.querySelectorAll('.nav button').forEach((button) => button.addEventListener('click', () => { document.querySelector('.nav button.active').classList.remove('active'); button.classList.add('active'); showToast(`${button.textContent} selected`); }));
+		fileInput.addEventListener('change', () => selectPhoto(fileInput.files[0]));
+		const uploadZone = document.querySelector('.upload-zone');
+		uploadZone.addEventListener('dragover', (event) => { event.preventDefault(); uploadZone.classList.add('dragging'); });
+		uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragging'));
+		uploadZone.addEventListener('drop', (event) => { event.preventDefault(); uploadZone.classList.remove('dragging'); selectPhoto(event.dataTransfer.files[0]); });
+		document.querySelector('#remove-button').addEventListener('click', () => { selectedFile = null; fileInput.value = ''; photoPreview.classList.remove('has-image'); photoImage.removeAttribute('src'); fileName.textContent = 'No new photo selected'; photoStatus.textContent = 'Current photo'; fileType.textContent = 'Not changed'; showToast('Your profile photo will be removed.'); });
+		document.querySelector('#save-button').addEventListener('click', () => showToast(selectedFile ? 'Your new profile photo has been saved.' : 'Choose a photo before saving.'));
+		document.querySelector('#cancel-button').addEventListener('click', () => showToast('Photo change canceled.'));
+		document.querySelector('#back-button').addEventListener('click', () => showToast('Returning to settings.'));
+	</script>
+</body>
+</html>

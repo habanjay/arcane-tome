@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add Expense | Expense Tracker</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--ink: #17191f;
+			--muted: #9ba1ae;
+			--line: #edf0f5;
+			--blue: #287ff0;
+			--teal: #2ab99d;
+			--nav-width: 265px;
+		}
+
+		* { box-sizing: border-box; }
+
+		body { margin: 0; min-width: 320px; background: #f1f3f6; color: var(--ink); font-family: "DM Sans", sans-serif; }
+		button, input, select, textarea { font: inherit; }
+		button { cursor: pointer; }
+		.app-shell { display: flex; min-height: 100vh; padding: 12px; }
+		.sidebar { width: var(--nav-width); flex: 0 0 var(--nav-width); padding: 68px 44px 40px; border-radius: 26px 0 0 26px; background: #111213; color: #fff; }
+		.profile { margin-bottom: 92px; }
+		.avatar-wrap { position: relative; width: 60px; margin-bottom: 17px; }
+		.avatar { display: grid; width: 60px; height: 60px; place-items: center; overflow: hidden; border-radius: 14px; background: linear-gradient(145deg, #c4b5a4, #776b62); }
+		.avatar::before { content: ""; width: 25px; height: 25px; margin-top: 18px; border-radius: 50%; background: #f1c49f; box-shadow: 0 20px 0 10px #a87155; }
+		.notification { position: absolute; top: -12px; right: -12px; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #ed3e47; font-size: 12px; font-weight: 700; }
+		.profile h1 { margin: 0 0 3px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 25px; letter-spacing: -0.6px; }
+		.profile p { margin: 0; color: #85858a; font-size: 14px; }
+		.nav { display: grid; gap: 30px; }
+		.nav button { padding: 0; border: 0; background: transparent; color: #89898d; font-size: 20px; font-weight: 600; text-align: left; transition: color 180ms ease, transform 180ms ease; }
+		.nav button:hover, .nav button.active { color: #fff; transform: translateX(3px); }
+		.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 292px; flex: 1; overflow: hidden; border-radius: 0 26px 26px 0; background: #fff; }
+		.content { min-width: 0; padding: 54px 82px 60px; }
+		.content-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+		.eyebrow { margin: 0 0 9px; color: #b1b4bc; font-size: 14px; }
+		.content h2 { margin: 0; font-family: "Plus Jakarta Sans", sans-serif; font-size: clamp(32px, 3vw, 42px); letter-spacing: -1.8px; }
+		.back-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; border: 0; background: transparent; color: #aeb3bd; font-size: 13px; }
+		.back-link:hover { color: var(--blue); }
+		.form-panel { max-width: 680px; margin-top: 48px; }
+		.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+		.field { display: grid; gap: 9px; margin-bottom: 25px; }
+		.field label { color: #969da9; font-size: 12px; font-weight: 600; letter-spacing: .4px; }
+		.field input, .field select, .field textarea { width: 100%; padding: 14px 15px; border: 1px solid #e7ebf0; border-radius: 8px; outline: 0; background: #fff; color: var(--ink); transition: border-color 180ms ease, box-shadow 180ms ease; }
+		.field textarea { min-height: 102px; resize: vertical; }
+		.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #287ff018; }
+		.amount-wrap { position: relative; }
+		.amount-wrap span { position: absolute; top: 14px; left: 15px; color: #9da4af; font-weight: 600; }
+		.amount-wrap input { padding-left: 43px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 20px; font-weight: 700; }
+		.category-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+		.category-option { display: grid; min-height: 72px; place-items: center; gap: 4px; padding: 9px 4px; border: 1px solid #e9edf2; border-radius: 8px; background: #fff; color: #949ba7; font-size: 10px; }
+		.category-option .category-icon { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 50%; color: #fff; font-size: 14px; }
+		.category-option.selected { border-color: var(--blue); color: var(--blue); box-shadow: 0 5px 14px #287ff018; }
+		.grocery { background: #36a9e0; } .transport { background: #b446ca; } .housing { background: #ff8900; } .food { background: #eb3738; } .entertainment { background: #47ad3e; }
+		.switch-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 25px; border-top: 1px solid var(--line); }
+		.switch-copy strong { display: block; margin-bottom: 3px; font-size: 14px; } .switch-copy span { color: #a1a7b1; font-size: 12px; }
+		.switch { position: relative; width: 40px; height: 22px; } .switch input { opacity: 0; width: 0; height: 0; }
+		.slider { position: absolute; inset: 0; border-radius: 20px; background: #e2e6ec; transition: background 180ms ease; } .slider::before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px #0002; transition: transform 180ms ease; }
+		.switch input:checked + .slider { background: var(--teal); } .switch input:checked + .slider::before { transform: translateX(18px); }
+		.actions { display: flex; align-items: center; gap: 18px; padding-top: 6px; } .save-button { padding: 13px 25px; border: 0; border-radius: 7px; background: #111213; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .7px; } .save-button:hover { background: var(--blue); }
+		.cancel-button { border: 0; background: transparent; color: #a4aab4; font-size: 12px; font-weight: 600; }
+		.summary { padding: 54px 42px 42px; background: #fafbfc; }
+		.summary h3 { margin: 10px 0 28px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 17px; }
+		.balance { padding-bottom: 28px; border-bottom: 1px solid #e9edf2; } .balance span { color: #a0a6b0; font-size: 12px; } .balance strong { display: block; margin-top: 6px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 25px; }
+		.balance small { display: inline-block; margin-top: 9px; padding: 5px 8px; border-radius: 4px; background: #e5f7f2; color: #1c9a82; font-size: 10px; font-weight: 700; }
+		.preview-title { margin: 31px 0 15px; color: #a0a6b0; font-size: 12px; } .preview { padding: 16px; border-radius: 10px; background: #fff; box-shadow: 0 8px 22px #17191f08; } .preview-head { display: flex; align-items: center; gap: 10px; } .preview-icon { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; color: #fff; font-size: 15px; } .preview strong { display: block; font-size: 13px; } .preview small { color: #adb3bd; font-size: 10px; } .preview-amount { margin: 17px 0 0; font-family: "Plus Jakarta Sans", sans-serif; font-size: 21px; }
+		.note { margin-top: 34px; padding: 18px; border-radius: 10px; background: #edf1f7; color: #949ca8; font-size: 12px; line-height: 1.5; } .note strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 13px; }
+		.toast { position: fixed; right: 24px; bottom: 24px; max-width: 280px; padding: 13px 16px; border-radius: 9px; background: #111213; color: #fff; box-shadow: 0 12px 30px #0002; font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(12px); transition: opacity 200ms ease, transform 200ms ease; } .toast.show { opacity: 1; transform: translateY(0); }
+		@media (max-width: 980px) { .content { padding: 42px 48px 48px; } .summary { padding: 42px 28px; } .sidebar { padding-left: 30px; padding-right: 30px; } }
+		@media (max-width: 760px) { .app-shell { display: block; padding: 0; } .sidebar { width: auto; padding: 22px 22px 18px; border-radius: 0; } .profile { display: flex; align-items: center; gap: 13px; margin-bottom: 20px; } .avatar-wrap { margin: 0; } .profile h1 { font-size: 19px; } .profile p { font-size: 12px; } .nav { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 3px; } .nav button { flex: 0 0 auto; font-size: 14px; } .workspace { display: block; border-radius: 0; } .content { padding: 34px 22px 40px; } .form-panel { margin-top: 36px; } .form-row { grid-template-columns: 1fr; gap: 0; } .category-picker { gap: 5px; } .category-option { min-height: 66px; font-size: 9px; } .summary { padding: 34px 22px 42px; } .summary h3 { margin-top: 0; } }
+	</style>
+</head>
+<body>
+	<div class="app-shell">
+		<aside class="sidebar" aria-label="Main navigation">
+			<div class="profile"><div class="avatar-wrap"><div class="avatar" aria-label="Samantha profile photo"></div><span class="notification">4</span></div><div><h1>Samantha</h1><p>samantha@email.com</p></div></div>
+			<nav class="nav"><button type="button">Dashboard</button><button type="button" class="active">Expenses</button><button type="button">Wallets</button><button type="button">Summary</button><button type="button">Accounts</button><button type="button">Settings</button></nav>
+		</aside>
+		<main class="workspace">
+			<section class="content" aria-labelledby="page-title">
+				<header class="content-header"><div><p class="eyebrow">25 March, 2020 <span class="dot"></span> New transaction</p><h2 id="page-title">Add expense</h2></div><button class="back-link" type="button" id="back-button">← Back to expenses</button></header>
+				<form class="form-panel" id="expense-form">
+					<div class="form-row"><div class="field"><label for="amount">AMOUNT</label><div class="amount-wrap"><span>Rp</span><input id="amount" name="amount" type="number" value="326800" min="0" required></div></div><div class="field"><label for="date">DATE</label><input id="date" name="date" type="date" value="2020-03-25" required></div></div>
+					<div class="field"><label>CATEGORY</label><div class="category-picker" role="group" aria-label="Expense category"><button class="category-option selected" type="button" data-category="Grocery"><span class="category-icon grocery">⌁</span>Grocery</button><button class="category-option" type="button" data-category="Transportation"><span class="category-icon transport">▣</span>Transport</button><button class="category-option" type="button" data-category="Housing"><span class="category-icon housing">⌂</span>Housing</button><button class="category-option" type="button" data-category="Food and Drink"><span class="category-icon food">⌁</span>Food</button><button class="category-option" type="button" data-category="Entertainment"><span class="category-icon entertainment">▶</span>Fun</button></div></div>
+					<div class="field"><label for="merchant">MERCHANT</label><input id="merchant" name="merchant" type="text" value="Pasar Minggu" placeholder="Where did you spend?" required></div>
+					<div class="field"><label for="note">NOTE <span>(OPTIONAL)</span></label><textarea id="note" name="note" placeholder="Add a little context for this expense..."></textarea></div>
+					<div class="switch-row"><div class="switch-copy"><strong>Recurring expense</strong><span>Repeat this expense automatically each month</span></div><label class="switch"><input type="checkbox" id="recurring"><span class="slider"></span></label></div>
+					<div class="actions"><button class="save-button" type="submit">SAVE EXPENSE</button><button class="cancel-button" type="button" id="cancel-button">Cancel</button></div>
+				</form>
+			</section>
+			<aside class="summary" aria-labelledby="summary-title"><h3 id="summary-title">Expense preview</h3><div class="balance"><span>Available balance</span><strong>Rp 8.245.600</strong><small>+ 12.4% this month</small></div><p class="preview-title">THIS TRANSACTION</p><div class="preview"><div class="preview-head"><span class="preview-icon grocery" id="preview-icon">⌁</span><div><strong id="preview-category">Grocery</strong><small id="preview-merchant">Pasar Minggu</small></div></div><p class="preview-amount" id="preview-amount">- Rp 326.800</p></div><div class="note"><strong>Keep it simple</strong>Adding a note makes it easier to remember where your money went when you review your month.</div></aside>
+		</main>
+	</div>
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+	<script>
+		const toast = document.querySelector('#toast');
+		let toastTimer;
+		function showToast(message) { toast.textContent = message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2400); }
+		document.querySelectorAll('.nav button').forEach((button) => button.addEventListener('click', () => { document.querySelector('.nav button.active').classList.remove('active'); button.classList.add('active'); showToast(`${button.textContent} selected`); }));
+		document.querySelectorAll('.category-option').forEach((button) => button.addEventListener('click', () => { document.querySelector('.category-option.selected').classList.remove('selected'); button.classList.add('selected'); document.querySelector('#preview-category').textContent = button.dataset.category; document.querySelector('#preview-icon').className = `preview-icon ${button.querySelector('.category-icon').classList[1]}`; document.querySelector('#preview-icon').textContent = button.querySelector('.category-icon').textContent; }));
+		document.querySelector('#merchant').addEventListener('input', (event) => { document.querySelector('#preview-merchant').textContent = event.target.value || 'Where you spent'; });
+		document.querySelector('#amount').addEventListener('input', (event) => { const value = Number(event.target.value || 0).toLocaleString('id-ID'); document.querySelector('#preview-amount').textContent = `- Rp ${value}`; });
+		document.querySelector('#expense-form').addEventListener('submit', (event) => { event.preventDefault(); showToast('Expense saved to your timeline.'); });
+		document.querySelector('#back-button').addEventListener('click', () => showToast('Returning to your expenses.'));
+		document.querySelector('#cancel-button').addEventListener('click', () => { document.querySelector('#expense-form').reset(); showToast('Expense draft cleared.'); });
+	</script>
+</body>
+</html>
