@@ -21,7 +21,7 @@ const knownRoutes = new Set<AppRoute>([
 
 function getRoute(): AppRoute {
   const path = window.location.pathname;
-  if (path === '/') return '/dashboard';
+  if (path === '/') return '/login';
   const route = path as AppRoute;
   return knownRoutes.has(route) ? route : '/404';
 }

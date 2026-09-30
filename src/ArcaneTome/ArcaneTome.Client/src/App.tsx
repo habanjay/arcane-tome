@@ -10,6 +10,7 @@ import SavingTipsPage from './components/SavingTipsPage';
 import Sidebar from './components/Sidebar';
 import SummaryPage from './components/SummaryPage';
 import { useAppRoute, type AppRoute } from './hooks/useAppRoute';
+import { authService } from './services/authService';
 import './styles/dashboard.css';
 
 type ToastMessage = string | null;
@@ -49,7 +50,13 @@ function App() {
 
   if (isPublicPage) return <>{page}{toast && <div className="toast show" role="status" aria-live="polite">{toast}</div>}</>;
 
-  return <div className="app-shell"><Sidebar activeItem={activeItem} onSelect={(label) => go(navigationRoutes[label])} />{page}{toast && <div className="toast show" role="status" aria-live="polite">{toast}</div>}</div>;
+  const handleLogout = () => {
+    authService.signOut();
+    go('/login');
+    showToast('You have been logged out.');
+  };
+
+  return <div className="app-shell"><Sidebar activeItem={activeItem} onSelect={(label) => go(navigationRoutes[label])} onLogout={handleLogout} />{page}{toast && <div className="toast show" role="status" aria-live="polite">{toast}</div>}</div>;
 }
 
 export default App;
