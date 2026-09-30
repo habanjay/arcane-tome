@@ -20,13 +20,13 @@ export type AccountActivity = {
 };
 
 export const accounts: Account[] = [
-  { id: 'everyday', name: 'Everyday spending', type: 'Primary account', details: '•••• 4820', amount: 'Rp 8.245.600', icon: '$', tone: 'blue' },
-  { id: 'rainy-day', name: 'Rainy day fund', type: 'Savings account', details: '•••• 0916', amount: 'Rp 3.178.900', icon: 'S', tone: 'green' },
-  { id: 'travel', name: 'Travel fund', type: 'Goal account', details: '•••• 7734', amount: 'Rp 1.216.000', icon: 'G', tone: 'orange' },
+  { id: 'everyday', name: 'Everyday spending', type: 'Primary account', details: '•••• 4820', amount: 'CA$8,245.60', icon: '$', tone: 'blue' },
+  { id: 'rainy-day', name: 'Rainy day fund', type: 'Savings account', details: '•••• 0916', amount: 'CA$3,178.90', icon: 'S', tone: 'green' },
+  { id: 'travel', name: 'Travel fund', type: 'Goal account', details: '•••• 7734', amount: 'CA$1,216.00', icon: 'G', tone: 'orange' },
 ];
 
 export const accountActivity: AccountActivity[] = [
-  { id: 'salary', label: 'Salary deposit', date: 'Today', account: 'Everyday spending', amount: '+ 6.500.000', icon: '+', tone: 'green', positive: true },
-  { id: 'groceries', label: 'Market groceries', date: 'Yesterday', account: 'Everyday spending', amount: '- 326.800', icon: '-', tone: 'red' },
-  { id: 'transfer', label: 'Monthly transfer', date: '23 March', account: 'Rainy day fund', amount: '- 500.000', icon: '↔', tone: 'purple' },
+  { id: 'salary', label: 'Salary deposit', date: 'Today', account: 'Everyday spending', amount: '+ CA$6,500.00', icon: '+', tone: 'green', positive: true },
+  { id: 'groceries', label: 'Market groceries', date: 'Yesterday', account: 'Everyday spending', amount: '- CA$326.80', icon: '-', tone: 'red' },
+  { id: 'transfer', label: 'Monthly transfer', date: '23 March', account: 'Rainy day fund', amount: '- CA$500.00', icon: '↔', tone: 'purple' },
 ];

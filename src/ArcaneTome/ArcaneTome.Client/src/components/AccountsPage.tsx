@@ -37,7 +37,7 @@ function AccountsPage({ onToast }: AccountsPageProps) {
           <div><p className="eyebrow">01 - 25 March, 2026</p><h2 id="accounts-page-title">Accounts</h2></div>
           <button className="add-button" type="button" onClick={() => setIsModalOpen(true)}><span aria-hidden="true">+</span> ADD ACCOUNT</button>
         </header>
-        <div className="balance"><div><p className="balance-label">Total balance across accounts</p><strong>Rp 12.640.500</strong></div><span className="change">+ 8.2% this month</span></div>
+        <div className="balance"><div><p className="balance-label">Total balance across accounts</p><strong>CA$12,640.50</strong></div><span className="change">+ 8.2% this month</span></div>
         <div className="section-title"><h3>Connected accounts</h3><button className="more" type="button" aria-label="More account options" onClick={() => onToast('Account actions opened.')}>•••</button></div>
         <div className="account-list">{accounts.map((account) => <AccountCard key={account.id} account={account} />)}</div>
         <div className="section-title"><h3>Recent account activity</h3><button className="more" type="button" aria-label="More activity options" onClick={() => onToast('Activity actions opened.')}>•••</button></div>
@@ -45,7 +45,7 @@ function AccountsPage({ onToast }: AccountsPageProps) {
       </section>
       <aside className="summary accounts-summary" aria-labelledby="savings-title">
         <h3 id="savings-title">Savings progress</h3>
-        <div className="summary-card"><span>Rainy day fund goal</span><strong>Rp 3.178.900</strong><div className="progress"><span /></div><small>68% of Rp 4.650.000 goal</small></div>
+        <div className="summary-card"><span>Rainy day fund goal</span><strong>CA$3,178.90</strong><div className="progress"><span /></div><small>68% of CA$4,650.00 goal</small></div>
         <div className="tip-card"><h4>Build your safety net</h4><p>You are getting closer to your emergency fund goal. Keep a little aside each payday.</p><button type="button" onClick={() => onToast('Your personalized saving tips are on the way.')}>VIEW SAVING TIPS</button></div>
       </aside>
       <AccountModal isOpen={isModalOpen} accountForm={accountForm} onChange={updateForm} onClose={closeModal} onSubmit={addAccount} />
@@ -70,3 +70,4 @@ function AccountModal({ isOpen, accountForm, onChange, onClose, onSubmit }: Acco
 }
 
 export default AccountsPage;
+

@@ -51,3 +51,14 @@ button { font: inherit; }
 .dashboard-home { font-size: 14px; }.dashboard-topbar p:last-child { font-size: 13px; }.widget-button, .date-button { min-height: 40px; font-size: 11px; }.dashboard-card-header h3, .rail-title { font-size: 15px; }.card-label { font-size: 12px; }.balance-total { font-size: 24px; }.balance-split strong { font-size: 16px; }.balance-split span, .spent-row { font-size: 10px; }.balance-actions button { min-height: 40px; font-size: 11px; }.segmented button { min-height: 32px; font-size: 10px; }.select-button { min-height: 34px; padding-inline: 11px; font-size: 10px; }.dashboard-bar-wrap small, .chart-scale { font-size: 9px; }.rail-transaction { min-height: 54px; }.rail-transaction strong { font-size: 11px; }.rail-transaction small { font-size: 9px; }.rail-transaction > b { font-size: 10px; }.goal-row strong { font-size: 11px; }.goal-row small { font-size: 9px; }.goal-row b { font-size: 11px; }.round-add, .circle-arrow { width: 32px; height: 32px; font-size: 16px; }.spending-legend span { font-size: 9px; }
 .dashboard-home button:focus-visible { outline: 3px solid #d8b675; outline-offset: 2px; }.dashboard-home .dashboard-card { transition: border-color 180ms ease, box-shadow 180ms ease; }.dashboard-home .dashboard-card:hover { border-color: #cbdcf7; box-shadow: 0 10px 24px #17191f12; }
 @media (max-width: 760px) { .dashboard-topbar p:last-child { font-size: 14px; }.widget-button, .date-button { min-height: 44px; }.balance-actions button, .select-button { min-height: 44px; }.segmented button { min-height: 38px; }.dashboard-card-header h3 { font-size: 16px; }.rail-transaction strong { font-size: 12px; }.rail-transaction small { font-size: 10px; }.goal-row strong { font-size: 12px; }.goal-row small { font-size: 10px; } }
+
+.balance-split > div { min-width: 0; }
+.balance-split span { display: block; overflow-wrap: anywhere; }
+.balance-split strong { font-size: 12px; white-space: nowrap; }
+.goal-row { grid-template-columns: 37px minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "progress name name" "progress saved goal"; align-items: start; }
+.goal-row .goal-progress { grid-area: progress; }
+.goal-row > div { grid-area: name; min-width: 0; }
+.goal-row > span:nth-child(3) { grid-area: saved; text-align: left; }
+.goal-row > span:nth-child(4) { grid-area: goal; text-align: left; }
+.goal-row b { white-space: nowrap; }
+.chart-scale { left: 17px; }
