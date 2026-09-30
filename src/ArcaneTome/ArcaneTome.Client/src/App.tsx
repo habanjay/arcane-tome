@@ -6,6 +6,7 @@ import DashboardPage from './components/DashboardPage';
 import ExpensesPage from './components/ExpensesPage';
 import NotFoundPage from './components/NotFoundPage';
 import SettingsPage from './components/SettingsPage';
+import SavingTipsPage from './components/SavingTipsPage';
 import Sidebar from './components/Sidebar';
 import SummaryPage from './components/SummaryPage';
 import { useAppRoute, type AppRoute } from './hooks/useAppRoute';
@@ -34,15 +35,16 @@ function App() {
   switch (route) {
     case '/dashboard': page = <DashboardPage onToast={showToast} />; break;
     case '/summary': page = <SummaryPage onToast={showToast} />; break;
-    case '/accounts': page = <AccountsPage onToast={showToast} />; break;
+    case '/accounts': page = <AccountsPage onToast={showToast} onSavingTips={() => go('/saving-tips')} />; break;
     case '/expenses/add': page = <AddExpensePage onBack={() => go('/expenses')} onSaved={showToast} />; break;
     case '/settings': page = <SettingsPage onNavigate={go} onToast={showToast} />; break;
     case '/settings/photo': page = <SettingsPage mode="photo" onNavigate={go} onToast={showToast} />; break;
     case '/settings/password': page = <SettingsPage mode="password" onNavigate={go} onToast={showToast} />; break;
+    case '/saving-tips': page = <SavingTipsPage onBack={() => go('/dashboard')} />; break;
     case '/login': page = <AuthPages mode="login" onNavigate={go} onToast={showToast} />; break;
     case '/create-account': page = <AuthPages mode="create" onNavigate={go} onToast={showToast} />; break;
     case '/404': page = <NotFoundPage onHome={() => go('/expenses')} />; break;
-    default: page = <ExpensesPage onToast={showToast} onAddExpense={() => go('/expenses/add')} />;
+    default: page = <ExpensesPage onToast={showToast} onAddExpense={() => go('/expenses/add')} onSavingTips={() => go('/saving-tips')} />;
   }
 
   if (isPublicPage) return <>{page}{toast && <div className="toast show" role="status" aria-live="polite">{toast}</div>}</>;

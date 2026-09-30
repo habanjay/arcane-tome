@@ -6,9 +6,10 @@ import { transactions } from '../services/dashboardData';
 type ExpensesPageProps = {
   onToast: (message: string) => void;
   onAddExpense: () => void;
+  onSavingTips: () => void;
 };
 
-function ExpensesPage({ onToast, onAddExpense }: ExpensesPageProps) {
+function ExpensesPage({ onToast, onAddExpense, onSavingTips }: ExpensesPageProps) {
   return (
     <main className="workspace dashboard-workspace">
       <section className="content dashboard-content" aria-labelledby="page-title">
@@ -18,7 +19,7 @@ function ExpensesPage({ onToast, onAddExpense }: ExpensesPageProps) {
         <TransactionGroup title="Today" items={transactions.slice(0, 3)} />
         <TransactionGroup title="Monday, 23 March 2026" items={transactions.slice(3)} />
       </section>
-      <SummaryPanel onTips={() => onToast('Your personalized saving tips are on the way.')} />
+      <SummaryPanel onTips={onSavingTips} />
     </main>
   );
 }

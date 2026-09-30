@@ -9,13 +9,14 @@ export type AppRoute =
   | '/settings'
   | '/settings/photo'
   | '/settings/password'
+  | '/saving-tips'
   | '/login'
   | '/create-account'
   | '/404';
 
 const knownRoutes = new Set<AppRoute>([
   '/dashboard', '/expenses', '/expenses/add', '/summary', '/accounts', '/settings',
-  '/settings/photo', '/settings/password', '/login', '/create-account', '/404',
+  '/settings/photo', '/settings/password', '/saving-tips', '/login', '/create-account', '/404',
 ]);
 
 function getRoute(): AppRoute {

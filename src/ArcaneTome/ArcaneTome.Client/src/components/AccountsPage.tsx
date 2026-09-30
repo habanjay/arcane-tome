@@ -3,6 +3,7 @@ import { accountActivity, accounts, type Account } from '../services/accountsDat
 
 type AccountsPageProps = {
   onToast: (message: string) => void;
+  onSavingTips: () => void;
 };
 
 type AccountForm = {
@@ -11,7 +12,7 @@ type AccountForm = {
   balance: string;
 };
 
-function AccountsPage({ onToast }: AccountsPageProps) {
+function AccountsPage({ onToast, onSavingTips }: AccountsPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [accountForm, setAccountForm] = useState<AccountForm>({ name: '', type: 'Everyday spending', balance: '' });
 
@@ -46,7 +47,7 @@ function AccountsPage({ onToast }: AccountsPageProps) {
       <aside className="summary accounts-summary" aria-labelledby="savings-title">
         <h3 id="savings-title">Savings progress</h3>
         <div className="summary-card"><span>Rainy day fund goal</span><strong>CA$3,178.90</strong><div className="progress"><span /></div><small>68% of CA$4,650.00 goal</small></div>
-        <div className="tip-card"><h4>Build your safety net</h4><p>You are getting closer to your emergency fund goal. Keep a little aside each payday.</p><button type="button" onClick={() => onToast('Your personalized saving tips are on the way.')}>VIEW SAVING TIPS</button></div>
+        <div className="tip-card"><h4>Build your safety net</h4><p>You are getting closer to your emergency fund goal. Keep a little aside each payday.</p><button type="button" onClick={onSavingTips}>VIEW SAVING TIPS</button></div>
       </aside>
       <AccountModal isOpen={isModalOpen} accountForm={accountForm} onChange={updateForm} onClose={closeModal} onSubmit={addAccount} />
     </main>
